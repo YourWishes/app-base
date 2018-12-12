@@ -1,7 +1,7 @@
 {
   "name": "@yourwishes/app-base",
-  "version": "0.0.1",
-  "description": "Biscuit is a typescript based NodeJS framework designed to easily integrate and connect with itself and other systems.",
+  "version": "1.0.0",
+  "description": "My custom NodeJS App Framework base, all modules depend on this and extend it in some form.",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
@@ -11,10 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YourWishes/biscuit.git"
+    "url": "git+https://github.com/YourWishes/app-base.git"
   },
   "keywords": [
-    "biscuit",
+    "app-base",
     "server",
     "framework",
     "dominic",
@@ -23,9 +23,9 @@
   "author": "Dominic Masters <dominic@domsplace.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/YourWishes/biscuit/issues"
+    "url": "https://github.com/YourWishes/app-base/issues"
   },
-  "homepage": "https://github.com/YourWishes/biscuit#readme",
+  "homepage": "https://github.com/YourWishes/app-base#readme",
   "devDependencies": {
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.12",
