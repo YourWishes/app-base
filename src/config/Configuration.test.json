@@ -1,0 +1,9 @@
+{
+  "name": "Test Configuration",
+  "group": {
+    "someChild": "Some Child Value",
+    "nestedGroup": {
+      "someChild": "Some Nested Child Value"
+    }
+  }
+}
