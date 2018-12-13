@@ -1,5 +1,5 @@
-import Module from './Module';
-import App from './../app/App';
+import { Module } from './Module';
+import { App } from './../app/App';
 
 //Testing Subclass
 class TestApp extends App {};

@@ -21,9 +21,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import App from './../app/App';
+import { App } from './../app/App';
 
-export default abstract class Module {
+export abstract class Module {
   app:App;
 
   constructor(app:App) {

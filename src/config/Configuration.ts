@@ -24,7 +24,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-export default class Configuration {
+export class Configuration {
   data:object;
 
   constructor() {

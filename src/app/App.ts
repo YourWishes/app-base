@@ -21,10 +21,10 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import Module from './../module/Module';
-import Configuration from './../config/Configuration';
+import { Module } from './../module/Module';
+import { Configuration } from './../config/Configuration';
 
-export default abstract class App {
+export abstract class App {
   modules:Module[]=[];
   config:Configuration;
 
@@ -47,7 +47,7 @@ export default abstract class App {
 
   async init():Promise<void> {
     await this.config.loadConfig();
-    
+
     for(let module of this.modules) {
       await module.init();
     }

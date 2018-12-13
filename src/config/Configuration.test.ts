@@ -1,4 +1,4 @@
-import Configuration from './Configuration';
+import { Configuration } from './Configuration';
 
 const fakePath = `${__dirname}/Configuration.test.json`;
 const fakeData = require('./Configuration.test.json');
