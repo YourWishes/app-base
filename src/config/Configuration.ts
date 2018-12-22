@@ -48,7 +48,7 @@ export class Configuration {
     }
 
     let filePath = this.getConfigFilePath();
-    if(!fs.existsSync(filePath)) throw "Configuration file does not exist!";
+    if(!fs.existsSync(filePath)) throw new Error("Configuration file does not exist!");
     let dataRaw = fs.readFileSync(filePath, 'utf8');
     this.data = JSON.parse(dataRaw);
   }

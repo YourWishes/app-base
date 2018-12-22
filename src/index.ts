@@ -24,3 +24,4 @@
 export * from './app/App';
 export * from './module/Module';
 export * from './config/Configuration';
+export * from './logger/';

@@ -23,23 +23,28 @@
 
 import { Module } from './../module/Module';
 import { Configuration } from './../config/Configuration';
+import { Logger, LogListener, LogLevel } from './../logger/';
 
-export abstract class App {
+export abstract class App implements LogListener {
   modules:Module[]=[];
   config:Configuration;
+  logger:Logger;
 
   constructor() {
+    this.logger = new Logger();
+    this.logger.addListener(this);
+
     this.config = new Configuration();
   }
 
   addModule(module:Module):void {
-    if(!(module instanceof Module)) throw "Invalid Module";
+    if(!(module instanceof Module)) throw new Error("Invalid Module");
     if(this.modules.includes(module)) return;
     this.modules.push(module);
   }
 
   removeModule(module:Module):void {
-    if(!(module instanceof Module)) throw "Invalid Module";
+    if(!(module instanceof Module)) throw new Error("Invalid Module");
     let index = this.modules.indexOf(module);
     if(index === -1) return;
     this.modules.splice(index, 1);
@@ -51,5 +56,30 @@ export abstract class App {
     for(let module of this.modules) {
       await module.init();
     }
+  }
+
+  onLog(level:LogLevel, info:string|Error, logger:Logger, t:Date):void {
+    //Pad Zero function
+    let padZero = (number:number, size:number=2):string => {
+      let strnum = `${number}`;
+      while(strnum.length < size) strnum = `0${strnum}`;
+      return strnum;
+    }
+
+    //Prepare our prefix
+    let date:string = `${t.getFullYear()}-${padZero(t.getMonth()+1)}-${padZero(t.getDate())}`;
+    let time:string = `${padZero(t.getHours())}:${padZero(t.getMinutes())}:${padZero(t.getSeconds())}.${padZero(t.getMilliseconds())}`;
+    let prefix:string = `${date} ${time} [${level.prefix}]`;
+
+    //Now we have our prefix, we're going to create an array of single line strings
+    //First, if this is an error we need to generate a stack trace.
+    if(info instanceof Error) info = info.stack;
+    let lines:string[] = info.replace(/\r/g, '').split('\n');
+
+
+    //Now Foreach Line log to console
+    lines.forEach(line => {
+      console.log(`${prefix} ${line}`);
+    });
   }
 }
