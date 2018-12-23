@@ -21,11 +21,12 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import { IApp } from './IApp';
 import { Module } from './../module/Module';
 import { Configuration } from './../config/Configuration';
-import { Logger, LogListener, LogLevel } from './../logger/';
+import { Logger, LogLevel } from './../logger/';
 
-export abstract class App implements LogListener {
+export abstract class App implements IApp {
   modules:Module[]=[];
   config:Configuration;
   logger:Logger;

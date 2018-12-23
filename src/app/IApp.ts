@@ -21,7 +21,17 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-export * from './app/';
-export * from './module/Module';
-export * from './config/Configuration';
-export * from './logger/';
+import { Module } from './../module/Module';
+import { Configuration } from './../config/Configuration';
+import { Logger, LogListener } from './../logger/';
+
+export interface IApp extends LogListener {
+  modules:Module[];
+  config:Configuration;
+  logger:Logger;
+
+  init():Promise<void>;
+
+  addModule(module:Module):void;
+  removeModule(module:Module):void;
+}

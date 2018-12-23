@@ -21,15 +21,15 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { App } from './../app/App';
+import { IApp } from './../app/';
 import { Logger } from './../logger/Logger';
 
 export abstract class Module {
-  app:App;
+  app:IApp;
   logger:Logger;
 
-  constructor(app:App) {
-    if(!(app instanceof App)) throw new Error("Invalid App");
+  constructor(app:IApp) {
+    if(app == null) throw new Error("Invalid App");
     this.app = app;
     this.logger = new Logger(app.logger);
   }
