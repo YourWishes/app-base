@@ -21,8 +21,8 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-export * from './app/';
-export * from './cache/';
-export * from './module/Module';
-export * from './config/Configuration';
-export * from './logger/';
+import { CacheStore } from './CacheStore';
+
+export interface ICacheable<T> {
+  cacheStore:CacheStore<T>;
+}
