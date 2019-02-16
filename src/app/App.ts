@@ -57,6 +57,8 @@ export abstract class App implements IApp {
     for(let module of this.modules) {
       await module.init();
     }
+
+    this.logger.info('App started successfully.');
   }
 
   onLog(level:LogLevel, info:string|Error, logger:Logger, t:Date):void {
