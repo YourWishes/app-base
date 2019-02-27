@@ -1,4 +1,4 @@
-import { App } from './App';
+import { App, Environment } from './App';
 import { Module } from './../module/Module';
 
 //Testing Subclass
@@ -16,6 +16,18 @@ class SubModuleClass extends Module {
 describe('App', () => {
   it('should be constructable a subclass', () => {
     expect(() => new SubClass()).not.toThrow();
+  });
+
+  it('should attempt to determine the environment', () => {
+    //Default to development
+    delete process.env['NODE_ENV'];
+    expect(new SubClass().environment).toEqual(Environment.DEVELOPMENT);
+
+    process.env['NODE_ENV'] = 'PRODUCTION';
+    expect(new SubClass().environment).toEqual(Environment.PRODUCTION);
+
+    process.env['NODE_ENV'] = 'STAGING';
+    expect(new SubClass().environment).toEqual(Environment.STAGING);
   });
 });
 

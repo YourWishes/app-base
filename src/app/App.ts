@@ -24,17 +24,43 @@
 import { IApp } from './IApp';
 import { Module } from './../module/Module';
 import { Configuration } from './../config/Configuration';
-import { Logger, LogLevel } from './../logger/';
+import { Logger, LogLevel, DEBUG } from './../logger/';
+
+export enum Environment {
+  DEVELOPMENT = "DEVELOPMENT",
+  STAGING = "STAGING",
+  PRODUCTION = "PRODUCTION"
+}
 
 export abstract class App implements IApp {
+  environment:Environment=Environment.DEVELOPMENT;
   modules:Module[]=[];
   config:Configuration;
   logger:Logger;
 
   constructor() {
+    //First thing first, we MUST determine what environment we're running under.
+    let pe:string = null;//String based check from certain things such as cli args
+
+    //Check environment variables.
+    if(process && process.env) {
+      // In the future I may allow other environment variables
+      pe = process.env['NODE_ENV'];
+    }
+
+    if(pe) {
+      switch(pe.toUpperCase()) {
+        case 'PRODUCTION':
+          this.environment = Environment.PRODUCTION; break;
+        case 'STAGING':
+          this.environment = Environment.STAGING; break;
+        case 'DEVELOPMENT':
+          this.environment = Environment.DEVELOPMENT; break;
+      }
+    }
+
     this.logger = new Logger();
     this.logger.addListener(this);
-
     this.config = new Configuration();
   }
 
@@ -62,6 +88,9 @@ export abstract class App implements IApp {
   }
 
   onLog(level:LogLevel, info:string|Error, logger:Logger, t:Date):void {
+    //Are we in a development mode?
+    if(level == DEBUG && this.environment == Environment.DEVELOPMENT) return;
+
     //Pad Zero function
     let padZero = (number:number, size:number=2):string => {
       let strnum = `${number}`;

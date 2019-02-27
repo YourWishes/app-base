@@ -24,8 +24,10 @@
 import { Module } from './../module/Module';
 import { Configuration } from './../config/Configuration';
 import { Logger, LogListener } from './../logger/';
+import { Environment } from './';
 
 export interface IApp extends LogListener {
+  environment:Environment;
   modules:Module[];
   config:Configuration;
   logger:Logger;
