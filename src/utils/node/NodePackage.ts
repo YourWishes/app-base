@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Dominic Masters
+// Copyright (c) 2019 Dominic Masters
 //
 // MIT License
 //
@@ -21,10 +21,28 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-export * from './app/';
-export * from './cache/';
-export * from './module/Module';
-export * from './config/Configuration';
-export * from './logger/';
-export * from './update/';
-export * from './utils/';
+/*
+  Node package.json type interface
+    Limited Subset only.
+*/
+export type NPMDependencies = {
+  [key:string]:string;
+}
+
+export type NPMRepository = (
+  { type?:string; url?:string; } | string
+);
+
+export type NPMPackage = {
+  name?:string;
+  version?:string;
+  description?:string;
+  main?:string;
+  scripts?:object;
+  keywords?:string[];
+  author?:string;
+  license?:string;
+  repository?:NPMRepository;
+  devDependencies?:NPMDependencies;
+  dependencies?:NPMDependencies;
+}

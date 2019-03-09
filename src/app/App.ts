@@ -25,6 +25,10 @@ import { IApp } from './IApp';
 import { Module } from './../module/Module';
 import { Configuration } from './../config/Configuration';
 import { Logger, LogLevel, DEBUG } from './../logger/';
+import { UpdateChecker } from './../update/';
+import { padWith } from './../utils/';
+
+export const CONFIGURATION_CHECK_UPDATES = 'update.check';
 
 export enum Environment {
   DEVELOPMENT = "DEVELOPMENT",
@@ -37,6 +41,7 @@ export abstract class App implements IApp {
   modules:Module[]=[];
   config:Configuration;
   logger:Logger;
+  updateChecker:UpdateChecker;
 
   constructor() {
     //First thing first, we MUST determine what environment we're running under.
@@ -62,6 +67,7 @@ export abstract class App implements IApp {
     this.logger = new Logger();
     this.logger.addListener(this);
     this.config = new Configuration();
+    this.updateChecker = new UpdateChecker(this);
   }
 
   addModule(module:Module):void {
@@ -84,19 +90,21 @@ export abstract class App implements IApp {
       await module.init();
     }
 
+    //Check for updates?
     this.logger.info('App started successfully.');
+    let updateCheck = true;
+    if(this.config.has(CONFIGURATION_CHECK_UPDATES)) {
+      updateCheck = this.config.get(CONFIGURATION_CHECK_UPDATES) ? true : false;
+    }
+
+    if(updateCheck) this.updateChecker.start();
   }
 
   onLog(level:LogLevel, info:string|Error, logger:Logger, t:Date):void {
     //Are we in a development mode?
     if(level == DEBUG && this.environment == Environment.DEVELOPMENT) return;
 
-    //Pad Zero function
-    let padZero = (number:number, size:number=2):string => {
-      let strnum = `${number}`;
-      while(strnum.length < size) strnum = `0${strnum}`;
-      return strnum;
-    }
+    let padZero = (n:number) => padWith(n, 2);
 
     //Prepare our prefix
     let date:string = `${t.getFullYear()}-${padZero(t.getMonth()+1)}-${padZero(t.getDate())}`;

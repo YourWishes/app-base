@@ -129,6 +129,8 @@ describe('log', () => {
       child.log(ERROR, 'test3');
     }).not.toThrow();
 
-    expect(listener.test).toHaveBeenCalledWith(ERROR, 'test3', child, new Date());
+    expect(listener.test.mock.calls[0]).toContain(ERROR)
+    expect(listener.test.mock.calls[0]).toContain('test3')
+    expect(listener.test.mock.calls[0]).toContain(child)
   });
 });
