@@ -1,6 +1,6 @@
 {
   "name": "@yourwishes/app-base",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "My custom NodeJS App Framework base, all modules depend on this and extend it in some form.",
   "main": "dist/index.js",
   "scripts": {

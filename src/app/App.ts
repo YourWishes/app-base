@@ -71,13 +71,13 @@ export abstract class App implements IApp {
   }
 
   addModule(module:Module):void {
-    if(!(module instanceof Module)) throw new Error("Invalid Module");
+    if(!module) throw new Error("Invalid Module");
     if(this.modules.includes(module)) return;
     this.modules.push(module);
   }
 
   removeModule(module:Module):void {
-    if(!(module instanceof Module)) throw new Error("Invalid Module");
+    if(!module) throw new Error("Invalid Module");
     let index = this.modules.indexOf(module);
     if(index === -1) return;
     this.modules.splice(index, 1);
