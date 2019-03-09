@@ -25,12 +25,14 @@ import { Module } from './../module/Module';
 import { Configuration } from './../config/Configuration';
 import { Logger, LogListener } from './../logger/';
 import { Environment } from './';
+import { UpdateChecker } from './../update/';
 
 export interface IApp extends LogListener {
   environment:Environment;
   modules:Module[];
   config:Configuration;
   logger:Logger;
+  updateChecker:UpdateChecker;
 
   init():Promise<void>;
 
