@@ -26,7 +26,6 @@ import { Environment, getEnvironmentFromString } from './../environment/';
 import { ModuleManager } from './../module/';
 import { Configuration } from './../config/Configuration';
 import { AppLogger } from './AppLogger';
-import { UpdateChecker } from './../update/';
 
 //export const CONFIGURATION_CHECK_UPDATES = 'update.check';
 
@@ -35,7 +34,6 @@ export abstract class App implements IApp {
   modules:ModuleManager;
   config:Configuration;
   logger:AppLogger;
-  updateChecker:UpdateChecker;
 
   constructor() {
     //First thing first, we MUST determine what environment we're running under.
@@ -48,7 +46,6 @@ export abstract class App implements IApp {
     this.config = new Configuration();
     this.modules = new ModuleManager(this);
   }
-
 
   async init():Promise<void> {
     this.logger.info(`Starting app in ${this.environment} mode.`);

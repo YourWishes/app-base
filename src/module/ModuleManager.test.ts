@@ -5,7 +5,9 @@ const dummyApp = new DummyApp();
 
 class SubModuleClass extends Module {
   testInit:jest.Mock;
+  testDestroy:jest.Mock;
   async init() { this.testInit(); }
+  async destroy() { this.testDestroy(); }
 }
 
 describe('ModuleManager', () => {
@@ -108,5 +110,12 @@ describe('init', () => {
     await test.init();
 
     expect(lastCalled).toEqual(69);
+  });
+});
+
+describe('destroy', () => {
+  it('should not throw any errors', async () => {
+    let test = new ModuleManager(dummyApp);
+    await expect(test.destroy()).resolves.not.toThrow();
   });
 });

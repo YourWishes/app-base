@@ -24,10 +24,9 @@
 import { IApp } from './../app/';
 import { Logger } from './../logger/';
 import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
+import { IUpdateable, Version } from './../update/';
 
-export type Version = number[];
-
-export abstract class Module {
+export abstract class Module implements IUpdateable {
   app:IApp;
   logger:Logger;
   package:NPMPackage;
@@ -42,6 +41,7 @@ export abstract class Module {
   }
 
   abstract async init():Promise<void>;
+  abstract async destroy():Promise<void>;
   loadPackage():NPMPackage { return null; };
 
   getName():string {

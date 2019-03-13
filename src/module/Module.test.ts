@@ -6,6 +6,7 @@ class TestApp extends App {};
 class TestModule extends Module {
   testInit:jest.Mock;
   async init() { this.testInit(); }
+  async destroy() { }
 }
 
 describe('Module', () => {
