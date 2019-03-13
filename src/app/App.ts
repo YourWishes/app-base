@@ -22,104 +22,45 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import { IApp } from './IApp';
-import { Module } from './../module/Module';
+import { Environment, getEnvironmentFromString } from './../environment/';
+import { ModuleManager } from './../module/';
 import { Configuration } from './../config/Configuration';
-import { Logger, LogLevel, DEBUG } from './../logger/';
+import { AppLogger } from './AppLogger';
 import { UpdateChecker } from './../update/';
-import { padWith } from './../utils/';
 
-export const CONFIGURATION_CHECK_UPDATES = 'update.check';
-
-export enum Environment {
-  DEVELOPMENT = "DEVELOPMENT",
-  STAGING = "STAGING",
-  PRODUCTION = "PRODUCTION"
-}
+//export const CONFIGURATION_CHECK_UPDATES = 'update.check';
 
 export abstract class App implements IApp {
-  environment:Environment=Environment.DEVELOPMENT;
-  modules:Module[]=[];
+  environment:Environment;
+  modules:ModuleManager;
   config:Configuration;
-  logger:Logger;
+  logger:AppLogger;
   updateChecker:UpdateChecker;
 
   constructor() {
     //First thing first, we MUST determine what environment we're running under.
-    let pe:string = null;//String based check from certain things such as cli args
+    let pe:string = null;
+    if(process && process.env) pe = process.env['NODE_ENV'];
+    this.environment = getEnvironmentFromString(pe);
 
-    //Check environment variables.
-    if(process && process.env) {
-      // In the future I may allow other environment variables
-      pe = process.env['NODE_ENV'];
-    }
-
-    if(pe) {
-      switch(pe.toUpperCase()) {
-        case 'PRODUCTION':
-          this.environment = Environment.PRODUCTION; break;
-        case 'STAGING':
-          this.environment = Environment.STAGING; break;
-        case 'DEVELOPMENT':
-          this.environment = Environment.DEVELOPMENT; break;
-      }
-    }
-
-    this.logger = new Logger();
-    this.logger.addListener(this);
+    //Setup core app components
+    this.logger = new AppLogger(this);
     this.config = new Configuration();
-    this.updateChecker = new UpdateChecker(this);
+    this.modules = new ModuleManager(this);
   }
 
-  addModule(module:Module):void {
-    if(!module) throw new Error("Invalid Module");
-    if(this.modules.includes(module)) return;
-    this.modules.push(module);
-  }
-
-  removeModule(module:Module):void {
-    if(!module) throw new Error("Invalid Module");
-    let index = this.modules.indexOf(module);
-    if(index === -1) return;
-    this.modules.splice(index, 1);
-  }
 
   async init():Promise<void> {
+    this.logger.info(`Starting app in ${this.environment} mode.`);
+
+    //Init the core modules
     await this.config.loadConfig();
+    await this.modules.init();
 
-    for(let module of this.modules) {
-      await module.init();
-    }
-
-    //Check for updates?
-    this.logger.info('App started successfully.');
-    let updateCheck = true;
-    if(this.config.has(CONFIGURATION_CHECK_UPDATES)) {
-      updateCheck = this.config.get(CONFIGURATION_CHECK_UPDATES) ? true : false;
-    }
-
-    if(updateCheck) this.updateChecker.start();
+    this.logger.info('The app has started successfully.');
   }
 
-  onLog(level:LogLevel, info:string|Error, logger:Logger, t:Date):void {
-    //Are we in a development mode?
-    if(level == DEBUG && this.environment == Environment.DEVELOPMENT) return;
+  async stop():Promise<void> {
 
-    let padZero = (n:number) => padWith(n, 2);
-
-    //Prepare our prefix
-    let date:string = `${t.getFullYear()}-${padZero(t.getMonth()+1)}-${padZero(t.getDate())}`;
-    let time:string = `${padZero(t.getHours())}:${padZero(t.getMinutes())}:${padZero(t.getSeconds())}.${padZero(t.getMilliseconds())}`;
-    let prefix:string = `${date} ${time} [${level.prefix}]`;
-
-    //Now we have our prefix, we're going to create an array of single line strings
-    //First, if this is an error we need to generate a stack trace.
-    if(info instanceof Error) info = info.stack;
-    let lines:string[] = info.replace(/\r/g, '').split('\n');
-
-
-    //Now Foreach Line log to console
-    lines.forEach(line => {
-      console.log(`${prefix} ${line}`);
-    });
   }
 }

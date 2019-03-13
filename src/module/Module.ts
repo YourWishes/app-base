@@ -22,17 +22,41 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import { IApp } from './../app/';
-import { Logger } from './../logger/Logger';
+import { Logger } from './../logger/';
+import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
+
+export type Version = number[];
 
 export abstract class Module {
   app:IApp;
   logger:Logger;
+  package:NPMPackage;
 
   constructor(app:IApp) {
-    if(app == null) throw new Error("Invalid App");
+    if(!app) throw new Error("Invalid App");
     this.app = app;
     this.logger = new Logger(app.logger);
+
+    //Load package information into cache
+    this.package = this.loadPackage();
   }
 
   abstract async init():Promise<void>;
+  loadPackage():NPMPackage { return null; };
+
+  getName():string {
+    if(!this.package) throw new Error("Missing package data");
+    if(!this.package.name || !this.package.name.length) throw new Error("Missing name in package data");
+    return name;
+  }
+
+  async getCurrentVersion():Promise<Version> {
+    if(!this.package) throw new Error("Missing package data");
+    return getPackageVersion(this.package.version);
+  }
+
+  async getNewVersion():Promise<Version> {
+    if(!this.package) throw new Error("Missing package data");
+    return getGitVersion(this.package);
+  }
 }

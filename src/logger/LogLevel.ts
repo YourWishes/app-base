@@ -22,6 +22,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 export class LogLevel {
+  static DEBUG:LogLevel;
+  static INFO:LogLevel;
+  static WARN:LogLevel;
+  static ERROR:LogLevel;
+  static SEVERE:LogLevel;
+
   level:number;
   name:string;
   prefix:string;
@@ -33,8 +39,8 @@ export class LogLevel {
   }
 }
 
-export const DEBUG = new LogLevel(30, 'Debug', 'DEBUG');
-export const INFO = new LogLevel(20, 'Info', 'INFO');
-export const WARN = new LogLevel(10, 'Warning', 'WARN');
-export const ERROR = new LogLevel(5, 'Error', 'ERROR');
-export const SEVERE = new LogLevel(0, 'Severe', 'SEVERE');
+export const DEBUG = LogLevel.DEBUG = new LogLevel(30, 'Debug', 'DEBUG');
+export const INFO = LogLevel.INFO = new LogLevel(20, 'Info', 'INFO');
+export const WARN = LogLevel.WARN = new LogLevel(10, 'Warning', 'WARN');
+export const ERROR = LogLevel.ERROR = new LogLevel(5, 'Error', 'ERROR');
+export const SEVERE = LogLevel.SEVERE = new LogLevel(0, 'Severe', 'SEVERE');

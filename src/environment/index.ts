@@ -21,10 +21,25 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-export type Version = number[];
+export enum Environment {
+  DEVELOPMENT = "DEVELOPMENT",
+  STAGING = "STAGING",
+  PRODUCTION = "PRODUCTION"
+}
 
-export interface IUpdateable {
-  getName():string;
-  getCurrentVersion():Promise<Version>;
-  getNewVersion():Promise<Version>;
+export const getEnvironmentFromString = (env:string) => {
+  //Default to Production Mode.
+  env = env || "PRODUCTION";
+
+  switch(env.toUpperCase()) {
+    case 'PRODUCTION':
+      return Environment.PRODUCTION;
+    case 'STAGING':
+      return Environment.STAGING;
+    case 'DEVELOPMENT':
+      return Environment.DEVELOPMENT;
+  }
+
+  //Default again to prod.
+  return Environment.PRODUCTION;
 }

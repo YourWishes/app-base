@@ -23,8 +23,8 @@
 
 export * from './app/';
 export * from './cache/';
-export * from './module/Module';
-export * from './config/Configuration';
+export * from './config/';
+export * from './environment/';
 export * from './logger/';
-export * from './update/';
+export * from './module/';
 export * from './utils/';

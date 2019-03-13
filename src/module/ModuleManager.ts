@@ -21,48 +21,48 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { App } from './../app/';
-import { NPMRepository } from './../utils/';
-import { fetch } from 'cross-fetch';
-import { IUpdateable } from './IUpdateable';
+import { Module } from './Module';
+import { IApp } from './../app/';
 
-export class UpdateChecker {
-  app:App;
-  updateables:IUpdateable[] = [];
+export class ModuleManager {
+  app:IApp;
+  modules:Module[]=[];
 
-  constructor(app:App) {
-    if(!app) throw new Error("Invalid App supplied");
+  constructor(app:IApp) {
+    if(!app) throw new Error("Invalid App Supplied");
     this.app = app;
   }
 
-  addUpdateable(u:IUpdateable) {
-    if(!u) throw new Error("Invalid Updateable supplied");
-    if(this.updateables.indexOf(u) !== -1) return;
-    this.updateables.push(u);
+  addModule(module:Module):void {
+    if(!module) throw new Error("Invalid Module");
+    if(this.modules.includes(module)) return;
+    this.modules.push(module);
   }
 
-  removeUpdateable(u:IUpdateable) {
-    if(!u) throw new Error("Invalid Updateable supplied");
-    let index = this.updateables.indexOf(u);
+  removeModule(module:Module):void {
+    if(!module) throw new Error("Invalid Module");
+    let index = this.modules.indexOf(module);
     if(index === -1) return;
-    this.updateables.splice(index, 1);
+    this.modules.splice(index, 1);
   }
 
-  async start() {
-    this.app.logger.debug(`Checking for updates...`);
-    let proms = this.updateables.map(async e => {
-      let current = await e.getCurrentVersion();
-      let next = await e.getNewVersion();
+  async init():Promise<void> {
+    for(let module of this.modules) {
+      await module.init();
+    }
 
-      if(current.length === next.length) {
-        let u = current.every((c,i) => c >= next[i]);
-        if(u) return;
-      }
-
-      this.app.logger.info(`Module ${e.getName()} has an update ${current.join('.')} => ${next.join('.')}`);
+    this.modules.forEach(m => {
+      this.updateCheck(m).catch(e => m.logger.error(e));
     });
+  }
 
-    await Promise.all(proms);
-    this.app.logger.info(`Finished checking for updates.`);
+  async updateCheck(module:Module):Promise<void> {
+    let current = await module.getCurrentVersion();
+    let next = await module.getNewVersion();
+    if(current.every((c,i) => c >= next[i])) return;
+    module.logger.info(`${module.getName()} has an update ${current.join('.')} => ${next.join('.')}`);
+  }
+
+  async destroy():Promise<void> {
   }
 }

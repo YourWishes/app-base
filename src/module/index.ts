@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Dominic Masters
+// Copyright (c) 2019 Dominic Masters
 //
 // MIT License
 //
@@ -21,18 +21,5 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { Environment } from './../environment/';
-import { AppLogger } from './AppLogger';
-import { Configuration } from './../config/Configuration';
-import { ModuleManager } from './../module/';
-import { UpdateChecker } from './../update/';
-
-export interface IApp {
-  environment:Environment;
-  modules:ModuleManager;
-  config:Configuration;
-  logger:AppLogger;
-  updateChecker:UpdateChecker;
-
-  init():Promise<void>;
-}
+export * from './Module';
+export * from './ModuleManager';
