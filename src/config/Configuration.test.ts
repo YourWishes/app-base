@@ -39,6 +39,7 @@ describe('getConfigFilePath', () => {
     expect(path).toBeDefined();
     expect(path.length).toBeDefined();
     expect(path.length).toBeGreaterThan(0);
+    expect(path).toStrictEqual(fakePath);
   });
 });
 

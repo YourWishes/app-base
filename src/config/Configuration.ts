@@ -38,7 +38,25 @@ export class Configuration {
   }
 
   getConfigFilePath():string {
-    return path.resolve('private', 'data', 'config.json');
+    //Current valid paths
+    let paths = [
+      path.resolve('private', 'data', 'config.json'),
+      path.resolve('src', 'data', 'config.json'),
+      path.resolve('data', 'config.json'),
+      path.resolve('private', 'src', 'data', 'config.json'),
+      path.resolve('src', 'private', 'data', 'config.json'),
+      path.resolve('./', 'config.json'),
+      path.resolve(__dirname, 'config.json'),
+      path.resolve(__dirname, 'Configuration.test.json')
+    ];
+
+    //Attempt to find configuration
+    let p = paths.find(path => {
+      return fs.existsSync(path);
+    });
+    if(!p) throw new Error("Failed to find configuration file!");
+
+    return p;
   }
 
   async loadConfig():Promise<void> {
