@@ -1,6 +1,7 @@
 import { Configuration } from './Configuration';
+import * as path from 'path';
 
-const fakePath = `${__dirname}/Configuration.test.json`;
+const fakePath = path.resolve(`${__dirname}/Configuration.test.json`);
 const fakeData = require('./Configuration.test.json');
 const fakeHerokuData = {
   'NAME': 'Test',
