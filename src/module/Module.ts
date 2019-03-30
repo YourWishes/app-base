@@ -47,7 +47,7 @@ export abstract class Module implements IUpdateable {
   getName():string {
     if(!this.package) throw new Error("Missing package data");
     if(!this.package.name || !this.package.name.length) throw new Error("Missing name in package data");
-    return name;
+    return this.package.name;
   }
 
   async getCurrentVersion():Promise<Version> {

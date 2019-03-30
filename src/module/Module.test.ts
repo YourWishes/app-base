@@ -19,3 +19,17 @@ describe('Module', () => {
     expect(() => new TestModule(testApp)).not.toThrow();
   });
 });
+
+describe('getName', () => {
+  it('should return the name from the package data', () => {
+    let module = new TestModule(new TestApp());
+
+    expect(() => module.getName()).toThrow();
+
+    module.package = {name: ''};
+    expect(() => module.getName()).toThrow();
+
+    module.package = {name: 'Hello World'};
+    expect(module.getName()).toStrictEqual('Hello World');
+  });
+});
