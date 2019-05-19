@@ -23,4 +23,4 @@
 
 export * from './IApp';
 export * from './App';
-export * from './AppLogger';
+export * from './logger/';

@@ -28,6 +28,8 @@ export class LogLevel {
   static ERROR:LogLevel;
   static SEVERE:LogLevel;
 
+  static LEVELS:LogLevel[]=[];
+
   level:number;
   name:string;
   prefix:string;
@@ -36,6 +38,8 @@ export class LogLevel {
     this.level = level;
     this.name = name;
     this.prefix = prefix;
+
+    LogLevel.LEVELS.push(this);
   }
 }
 

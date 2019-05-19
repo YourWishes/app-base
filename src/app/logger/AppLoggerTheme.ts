@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Dominic Masters
+// Copyright (c) 2019 Dominic Masters
 //
 // MIT License
 //
@@ -21,16 +21,27 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { Environment } from './../environment/';
-import { AppLogger } from './logger/';
-import { Configuration } from './../config/Configuration';
-import { ModuleManager } from './../module/';
+import * as chalk from 'chalk';
+import { Chalk } from 'chalk';
 
-export interface IApp {
-  environment:Environment;
-  modules:ModuleManager;
-  config:Configuration;
-  logger:AppLogger;
+export interface AppLoggerTheme {
+  severe:Chalk;
+  error:Chalk;
+  warning:Chalk;
+  debug:Chalk;
+  highlight:Chalk;
+  success:Chalk;
+  time:Chalk;
+  default:Chalk|null;
+}
 
-  init():Promise<void>;
+export const DefaultTheme:AppLoggerTheme = {
+  severe:chalk.default.bgRed.white,
+  error:chalk.default.red,
+  warning:chalk.default.yellow,
+  debug:chalk.default.hex('#666666'),
+  highlight:chalk.default.magenta,
+  success:chalk.default.green,
+  time:chalk.default.hex('#666666'),
+  default:null
 }

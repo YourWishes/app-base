@@ -21,31 +21,62 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { IApp } from './IApp';
-import { Environment } from './../environment/';
-import { LogLevel, Logger, LogListener } from './../logger/';
-import { padWith } from './../utils/';
+import { IApp } from './../IApp';
+import { Environment } from './../../environment/';
+import { LogLevel, Logger, LogListener } from './../../logger/';
+import { padWith } from './../../utils/';
+import { AppLoggerTheme, DefaultTheme } from './AppLoggerTheme';
+import * as chalk from 'chalk';
 
 export class AppLogger extends Logger implements LogListener {
   app:IApp;
+  supportsColor:boolean;
+  theme:AppLoggerTheme=DefaultTheme;
 
   constructor(app:IApp) {
     super();
 
+    //Reference app
     this.app = app;
     this.addListener(this);
+  }
+
+  getColorFromLevel(level:LogLevel) {
+    switch(level) {
+      case LogLevel.INFO:
+        return this.theme.default  || chalk.default.reset;
+      case LogLevel.DEBUG:
+        return this.theme.debug;
+      case LogLevel.ERROR:
+        return this.theme.error;
+      case LogLevel.SEVERE:
+        return this.theme.severe;
+      case LogLevel.WARN:
+        return this.theme.warning;
+      default:
+        return this.theme.default || chalk.default.reset;
+    }
   }
 
   onLog(level:LogLevel, info:string|Error, logger:Logger, t:Date): void {
     //Are we in a development mode?
     if(level === LogLevel.DEBUG && this.app.environment !== Environment.DEVELOPMENT) return;
 
-    let padZero = (n:number) => padWith(n, 2);
+    //Get the current log level color
+    let logColor = this.getColorFromLevel(level);
 
-    //Prepare our prefix
-    let date:string = `${t.getFullYear()}-${padZero(t.getMonth()+1)}-${padZero(t.getDate())}`;
-    let time:string = `${padZero(t.getHours())}:${padZero(t.getMinutes())}:${padZero(t.getSeconds())}.${padZero(t.getMilliseconds())}`;
-    let prefix:string = `${date} ${time} [${level.prefix}]`;
+    //Begin the prefix
+    let prefix = '';
+
+    //Append our timestamp prefix strings
+    let padZero = (n:number) => padWith(n, 2);
+    prefix += this.theme.time(
+      `${t.getFullYear()}-${padZero(t.getMonth()+1)}-${padZero(t.getDate())}` +
+      `${padZero(t.getHours())}:${padZero(t.getMinutes())}:${padZero(t.getSeconds())}.${padZero(t.getMilliseconds())}`
+    );
+
+    //Append the log level
+    prefix += ' ' + logColor(`[${level.prefix}]`);
 
     //Now we have our prefix, we're going to create an array of single line strings
     //First, if this is an error we need to generate a stack trace.
@@ -55,7 +86,7 @@ export class AppLogger extends Logger implements LogListener {
 
     //Now Foreach Line log to console
     lines.forEach(line => {
-      console.log(`${prefix} ${line}`);
+      console.log(`${prefix}${logColor(line)}`);
     });
   }
 }

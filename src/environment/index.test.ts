@@ -17,5 +17,6 @@ describe('getEnvironmentFromString', () => {
     expect(getEnvironmentFromString('staging')).toStrictEqual(Environment.STAGING);
     expect(getEnvironmentFromString('PRODuction')).toStrictEqual(Environment.PRODUCTION);
     expect(getEnvironmentFromString('PRODUCTION')).toStrictEqual(Environment.PRODUCTION);
+    expect(getEnvironmentFromString('test')).toStrictEqual(Environment.DEVELOPMENT);
   });
 });

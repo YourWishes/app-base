@@ -38,6 +38,8 @@ export const getEnvironmentFromString = (env:string) => {
       return Environment.STAGING;
     case 'DEVELOPMENT':
       return Environment.DEVELOPMENT;
+    case 'TEST':
+      return Environment.DEVELOPMENT;
   }
 
   //Default again to prod.
