@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Dominic Masters
+// Copyright (c) 2019 Dominic Masters
 //
 // MIT License
 //
@@ -21,11 +21,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-export * from './app/';
-export * from './cache/';
-export * from './cli';
-export * from './config/';
-export * from './environment/';
-export * from './logger/';
-export * from './module/';
-export * from './utils/';
+export * from './command/';
+export * from './options/';
+export * from './cli/';
+export * from './manager/';

@@ -1,4 +1,4 @@
-import { App, Environment, useCLI } from './../';
+import { App, Environment } from './../';
 
 //Testing Subclass
 class SubClass extends App {
@@ -23,24 +23,6 @@ describe('App', () => {
 
     process.env['NODE_ENV'] = 'STAGING';
     expect(new SubClass().environment).toEqual(Environment.STAGING);
-  });
-});
-
-describe('useCLI', () => {
-  it('should cause an app initilization to invoke it', () => {
-    let dummyCLI = jest.fn(() => true);
-    expect(() => new SubClass()).not.toThrow();
-    expect(dummyCLI).not.toHaveBeenCalled();
-
-    //Link
-    expect(() => useCLI(dummyCLI)).not.toThrow();
-
-    //Should be called on init
-    expect(() => new SubClass()).not.toThrow();
-    expect(dummyCLI).toHaveBeenCalled();
-
-    //Allow unlinking
-    expect(() => useCLI(null)).not.toThrow();
   });
 });
 

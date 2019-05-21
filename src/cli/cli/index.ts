@@ -1,5 +1,3 @@
-#! /usr/bin/env node
-
 // Copyright (c) 2019 Dominic Masters
 //
 // MIT License
@@ -44,50 +42,47 @@
   async init() of your app? Yep this will break that nicely for you.
 */
 
-//Imports!
 import * as path from 'path';
-import { App, useCLI } from './../app/';
-import * as program from 'commander';
+import { App } from './../../app/';
+import { useCLI } from './../manager/';
 
-//Let's create the CLI Callback.
-//This is called by a constructing app PRIOR to the super() call finishing, but
-//after all the common tools (logger, config, etc.) being ready.
-let cliInitialized = false;
-const cli = useCLI((app:App) => {
-  cliInitialized = true;//Will make sure things are working fine down low.
+export const cli = () => {
+  //Let's create the CLI Callback.
+  //This is called by a constructing app PRIOR to the super() call finishing, but
+  //after all the common tools (logger, config, etc.) being ready.
+  let cliInitialized = false;
+  let cliCallback = useCLI((app:App) => {
+    cliInitialized = true;//Will make sure things are working fine down low.
 
-  //We are now ready to do CLI stuff here.
-  return app.cli(program);
-});
+    //We are now ready to do CLI stuff here.
+    return app.cli.run();
+  });
 
-//Where are we going to begin looking? This should be the directory that the app
-//exists within, in one of the above mentioned directories
-let dir = path.resolve('./');
+  //Where are we going to begin looking? This should be the directory that the app
+  //exists within, in one of the above mentioned directories
+  let dir = path.resolve('./');
 
-//Now that the CLI is ready, the app can initialize safely.
-let result = [
-  'dist/index', 'dist/private/index', 'src/index', 'src/private/index',
-].some(e => {
-  //Get the expected path in absolute space
-  let p = path.resolve(path.join(dir, e));
+  //Now that the CLI is ready, the app can initialize safely.
+  let result = [
+    'dist/index', 'dist/private/index', 'src/index', 'src/private/index',
+  ].some(e => {
+    //Get the expected path in absolute space
+    let p = path.resolve(path.join(dir, e));
 
-  //Now attempt a load
-  try {
-    console.log('Loading ' + p);
+    //Now attempt a load
+    try {
+      //Will throw an error if it can't load, this will also be what FINALLY
+      //triggers the app to load (hopefully)
+      require(p);
 
-    //Will throw an error if it can't load, this will also be what FINALLY
-    //triggers the app to load (hopefully)
-    require(p);
+      return cliInitialized;//No matter what, when it's all done it will return true
+    } catch(ex) {
+      //Return false and check next file, when we reach the last iteration and
+      //can't find the app it will make result = false and show an error (below)
+      return false;
+    }
+  });
 
-    return cliInitialized;//No matter what, when it's all done it will return true
-  } catch(ex) {
-    //Return false and check next file, when we reach the last iteration and
-    //can't find the app it will make result = false and show an error (below)
-    return false;
-  }
-});
-
-//If we have this as false then the app never loaded
-if(!result) {
-  console.log('Failed to load app, check directory is correct.');
-}
+  //If we have this as false then the app never loaded
+  if(!result) console.log('Failed to load app, check directory is correct.');
+};

@@ -1,0 +1,3 @@
+#! /usr/bin/env node
+
+const yw = require('./../dist/cli/yw');

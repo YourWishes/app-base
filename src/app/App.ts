@@ -26,22 +26,18 @@ import { Environment, getEnvironmentFromString } from './../environment/';
 import { ModuleManager } from './../module/';
 import { Configuration } from './../config/Configuration';
 import { AppLogger } from './logger/';
-import { CommanderStatic } from 'commander';
-import { IUpdateable, Version } from './../update/';
+import { CLIManager, CLICommand } from './../cli/';
+import { Version } from './../update/';
 import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
 
-//CLI Interface
-let cli = null;
-export type CLIProgram = (app:App) => boolean;
-export const useCLI = (program:CLIProgram) => cli = program;;
-
 //App Class
-export abstract class App implements IApp, IUpdateable {
+export abstract class App implements IApp {
   environment:Environment;
   modules:ModuleManager;
   config:Configuration;
   logger:AppLogger;
   package:NPMPackage;
+  cli:CLIManager;
 
   constructor() {
     //First thing first, we MUST determine what environment we're running under.
@@ -52,6 +48,7 @@ export abstract class App implements IApp, IUpdateable {
     //Setup core app components
     this.logger = new AppLogger(this);
     this.config = new Configuration();
+    this.cli = new CLIManager(this);
     this.modules = new ModuleManager(this);
 
     //Load package information into cache
@@ -59,7 +56,7 @@ export abstract class App implements IApp, IUpdateable {
 
     //Now check if we're passing off to the CLI, if it fails for some reason
     //it'll return a falsy value. At this point we're going to crash.
-    if(cli && !cli()) process.exit(-1);//Bad but still
+    this.cli.ready();
   }
 
   //Version Controlling, ideally you should super this method with a reference to your package.json
@@ -85,16 +82,12 @@ export abstract class App implements IApp, IUpdateable {
     await this.config.loadConfig();
     await this.modules.init();
 
-    this.logger.info('The app has started successfully.');
+    this.logger.info(this.logger.theme.success(
+      'The app has started successfully.'
+    ));
   }
 
   async stop():Promise<void> {
 
-  }
-
-  cli(program:CommanderStatic):boolean {
-    if(!this.package) throw new Error("In order to use the CLI you will need to setup the package.json super for app.loadPackage()");
-
-    return true;
   }
 }

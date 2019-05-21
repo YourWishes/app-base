@@ -25,12 +25,18 @@ import { Environment } from './../environment/';
 import { AppLogger } from './logger/';
 import { Configuration } from './../config/Configuration';
 import { ModuleManager } from './../module/';
+import { CLIManager } from './../cli/';
+import { IUpdateable } from './../update/';
+import { NPMPackage } from './../utils';
 
-export interface IApp {
+export interface IApp extends IUpdateable {
   environment:Environment;
   modules:ModuleManager;
   config:Configuration;
   logger:AppLogger;
+  package:NPMPackage;
+  cli:CLIManager;
 
   init():Promise<void>;
+  stop():Promise<void>;
 }

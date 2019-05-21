@@ -1,4 +1,11 @@
-import { Module, ModuleManager, App } from './../';
+import { Module, ModuleManager, App, CLICommand, CommandOptions } from './../';
+class DummyCommand extends CLICommand {
+  mock:any = jest.fn();
+
+  async onCommand(app:App, action:string, options:CommandOptions) {
+    return this.mock(app, action, options);
+  }
+}
 
 class DummyApp extends App {}
 const dummyApp = new DummyApp();
@@ -79,6 +86,71 @@ describe('removeModule', () => {
     expect(test.modules).toContain(module2);
   });
 });
+
+
+describe('addCommand', () => {
+  it('should require a real command', () => {
+    let module = new SubModuleClass(dummyApp);
+    expect(() => module.addCommand(null)).toThrow();
+  });
+
+  it('should add a command only once', () => {
+    let module = new SubModuleClass(dummyApp);
+
+    let command1 = new DummyCommand(module, 'test1');
+    let command2 = new DummyCommand(module, 'test2');
+    let command3 = new DummyCommand(module, 'test3');
+
+    expect(module.cliCommands).not.toContain(command1);
+    expect(module.cliCommands).toHaveLength(0);
+
+    expect(() => module.addCommand(command1)).not.toThrow();
+    expect(module.cliCommands).toContain(command1);
+    expect(module.cliCommands).toHaveLength(1);
+
+    expect(() => module.addCommand(command1)).not.toThrow();
+    expect(module.cliCommands).toHaveLength(1);
+
+    expect(() => module.addCommand(command2)).not.toThrow();
+    expect(() => module.addCommand(command3)).not.toThrow();
+
+    expect(module.cliCommands).toHaveLength(3);
+  });
+});
+
+describe('removeCommand', () => {
+  it('should require a real command', () => {
+    let module = new SubModuleClass(dummyApp);
+    expect(() => module.removeCommand(null)).toThrow();
+  });
+
+  it('should remove the command only once', () => {
+    let module = new SubModuleClass(dummyApp);
+
+    let command1 = new DummyCommand(module, 'test1');
+    let command2 = new DummyCommand(module, 'test2');
+    let command3 = new DummyCommand(module, 'test3');
+
+    module.addCommand(command1);
+    module.addCommand(command2);
+    module.addCommand(command3);
+    expect(module.cliCommands).toHaveLength(3);
+
+    expect(() => module.removeCommand(command1)).not.toThrow();
+    expect(module.cliCommands).toHaveLength(2);
+    expect(module.cliCommands).not.toContain(command1);
+
+    expect(() => module.removeCommand(command3)).not.toThrow();
+    expect(module.cliCommands).toHaveLength(1);
+    expect(module.cliCommands).not.toContain(command3);
+
+    expect(() => module.removeCommand(command3)).not.toThrow();
+    expect(module.cliCommands).toHaveLength(1);
+    expect(module.cliCommands).toContain(command2);
+  });
+});
+
+
 
 describe('init', () => {
   it('should not throw any errors', async () => {

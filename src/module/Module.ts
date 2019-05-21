@@ -25,11 +25,13 @@ import { IApp } from './../app/';
 import { Logger } from './../logger/';
 import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
 import { IUpdateable, Version } from './../update/';
+import { ICLICommander, CLICommand } from './../cli/';
 
-export abstract class Module implements IUpdateable {
+export abstract class Module implements IUpdateable, ICLICommander {
   app:IApp;
   logger:Logger;
   package:NPMPackage;
+  cliCommands:CLICommand[]=[];
 
   constructor(app:IApp) {
     if(!app) throw new Error("Invalid App");
@@ -43,6 +45,19 @@ export abstract class Module implements IUpdateable {
   abstract async init():Promise<void>;
   abstract async destroy():Promise<void>;
   loadPackage():NPMPackage { return null; };
+
+  addCommand(command:CLICommand) {
+    if(!command) throw new Error('Invalid Command!');
+    if(this.cliCommands.indexOf(command) !== -1) return;
+    this.cliCommands.push(command);
+  }
+
+  removeCommand(command:CLICommand) {
+    if(!command) throw new Error('Invalid Command!');
+    let i = this.cliCommands.indexOf(command);
+    if(i === -1) return;
+    this.cliCommands.splice(i,1);
+  }
 
   getName():string {
     if(!this.package) throw new Error("Missing package data");

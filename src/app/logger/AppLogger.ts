@@ -86,7 +86,7 @@ export class AppLogger extends Logger implements LogListener {
 
     //Now Foreach Line log to console
     lines.forEach(line => {
-      console.log(`${prefix}${logColor(line)}`);
+      console.log(`${prefix} ${logColor(line)}`);
     });
   }
 }
