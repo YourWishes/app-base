@@ -21,20 +21,20 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { App } from './../../app/';
+import { IApp } from './../../app/';
 import { CommandOptions, getOptionsForArgs } from './../options/';
 import { ICLICommander, CLICommand } from './../command/';
 
 //CLI Interface
 let cli = null;
-export type CLIProgram = (app:App) => Promise<boolean>;
+export type CLIProgram = (app:IApp) => Promise<boolean>;
 export const useCLI = (program:CLIProgram) => cli = program;
 
 export class CLIManager implements ICLICommander {
-  app:App;
+  app:IApp;
   cliCommands:CLICommand[]=[];
 
-  constructor(app:App) {
+  constructor(app:IApp) {
     if(!app) throw new Error('Please supply a valid App');
     this.app = app;
   }

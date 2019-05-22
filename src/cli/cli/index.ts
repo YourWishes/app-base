@@ -43,7 +43,7 @@
 */
 
 import * as path from 'path';
-import { App } from './../../app/';
+import { IApp } from './../../app/';
 import { useCLI } from './../manager/';
 
 export const cli = () => {
@@ -51,7 +51,7 @@ export const cli = () => {
   //This is called by a constructing app PRIOR to the super() call finishing, but
   //after all the common tools (logger, config, etc.) being ready.
   let cliInitialized = false;
-  let cliCallback = useCLI((app:App) => {
+  let cliCallback = useCLI((app:IApp) => {
     cliInitialized = true;//Will make sure things are working fine down low.
 
     //We are now ready to do CLI stuff here.

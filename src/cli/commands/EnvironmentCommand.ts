@@ -23,7 +23,7 @@
 
 import { CLICommand, CommandResult, ICLICommander } from './../command/';
 import { CommandOptions } from './../options/';
-import { App } from './../../app/';
+import { IApp } from './../../app/';
 import { getEnvironments, Environment } from './../../environment/';
 
 export class EnvironmentCommand extends CLICommand {
@@ -31,7 +31,7 @@ export class EnvironmentCommand extends CLICommand {
     super(commander, '*');
   }
 
-  async onCommand(app:App, action:string, options:CommandOptions):Promise<CommandResult> {
+  async onCommand(app:IApp, action:string, options:CommandOptions):Promise<CommandResult> {
     let envs = getEnvironments();
     let env = (options.args['environment'] || envs.find(e => {
       if(options.flags[e]) return true;//-development

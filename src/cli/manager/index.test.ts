@@ -1,5 +1,5 @@
 import {
-  CLIManager, App, useCLI, CLICommand, CommandOptions
+  CLIManager, IApp, App, useCLI, CLICommand, CommandOptions
 } from './../../';
 
 //Dummy classes
@@ -7,7 +7,7 @@ class DummyApp extends App {}
 class DummyCommand extends CLICommand {
   mock:any = jest.fn();
 
-  async onCommand(app:App, action:string, options:CommandOptions) {
+  async onCommand(app:IApp, action:string, options:CommandOptions) {
     return this.mock(app, action, options);
   }
 }

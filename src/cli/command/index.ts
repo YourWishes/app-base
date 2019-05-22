@@ -21,7 +21,7 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { App } from './../../app/';
+import { IApp } from './../../app/';
 import { CommandOptions } from './../options/';
 
 //Commander Interface, implemented by whatever is allowed to give commands
@@ -55,5 +55,5 @@ export abstract class CLICommand {
     return action == this.action.toLowerCase() || this.aliases.some(alias => alias.toLowerCase() == action);
   }
 
-  abstract onCommand(app:App, action:string, options:CommandOptions):Promise<CommandResult>;
+  abstract onCommand(app:IApp, action:string, options:CommandOptions):Promise<CommandResult>;
 }
