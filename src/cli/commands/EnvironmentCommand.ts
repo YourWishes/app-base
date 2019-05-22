@@ -28,9 +28,7 @@ import { getEnvironments, Environment } from './../../environment/';
 
 export class EnvironmentCommand extends CLICommand {
   constructor(commander:ICLICommander) {
-    super(
-      commander, 'environment', getEnvironments().reduce((x,e) => [...x,e,e.slice(0,1)], [])
-    );
+    super(commander, '*');
   }
 
   async onCommand(app:App, action:string, options:CommandOptions):Promise<CommandResult> {
