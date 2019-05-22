@@ -50,6 +50,7 @@ export abstract class CLICommand {
   }
 
   isAction(action:string) {
+    if(this.action == '*') return true;
     action = action.toLowerCase();
     return action == this.action.toLowerCase() || this.aliases.some(alias => alias.toLowerCase() == action);
   }

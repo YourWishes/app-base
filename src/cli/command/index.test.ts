@@ -2,7 +2,7 @@ import { CLICommand, ICLICommander } from './../../';
 
 class DummyCommanderClass implements ICLICommander {
   cliCommands:CLICommand[] = [];
-  
+
   addCommand(command:CLICommand) {}
   removeCommand(command:CLICommand) {}
 }
@@ -50,5 +50,15 @@ describe('isAction', () => {
     expect(command.isAction('hELl')).toStrictEqual(false);
     expect(command.isAction('hElLo')).toStrictEqual(true);
     expect(command.isAction('helloP')).toStrictEqual(true);
+  });
+
+  it('should return true on wildcard commands', () => {
+    let command = new DummyCommand(dummyCommander, '*');
+    expect(command.isAction('hel')).toStrictEqual(true);
+    expect(command.isAction('HeL')).toStrictEqual(true);
+    expect(command.isAction('hElLo')).toStrictEqual(true);
+    expect(command.isAction('anything')).toStrictEqual(true);
+    expect(command.isAction('ANYTHING')).toStrictEqual(true);
+    expect(command.isAction('anyThING')).toStrictEqual(true);
   });
 });
