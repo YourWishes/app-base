@@ -26,7 +26,7 @@ import { Environment, getEnvironmentFromString } from './../environment/';
 import { ModuleManager } from './../module/';
 import { Configuration } from './../config/Configuration';
 import { AppLogger } from './logger/';
-import { CLIManager, CLICommand } from './../cli/';
+import { CLIManager, CLICommand, EnvironmentCommand } from './../cli/';
 import { Version } from './../update/';
 import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
 
@@ -54,9 +54,9 @@ export abstract class App implements IApp {
     //Load package information into cache
     this.package = this.loadPackage();
 
-    //Now check if we're passing off to the CLI, if it fails for some reason
-    //it'll return a falsy value. At this point we're going to crash.
-    this.cli.ready();
+    [
+      EnvironmentCommand
+    ].forEach(cmd => this.cli.addCommand( new cmd(this.cli) ));
   }
 
   //Version Controlling, ideally you should super this method with a reference to your package.json
@@ -76,6 +76,10 @@ export abstract class App implements IApp {
 
   //Initializers
   async init():Promise<void> {
+    //Now check if we're passing off to the CLI, if it fails for some reason
+    //it'll return a falsy value. At this point we're going to crash.
+    this.cli.ready();
+
     this.logger.info(`Starting app in ${this.environment} mode.`);
 
     //Init the core modules

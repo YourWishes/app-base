@@ -1,4 +1,11 @@
-import { Environment, getEnvironmentFromString } from './';
+import { Environment, getEnvironmentFromString, getEnvironments } from './';
+
+describe('getEnvironments', () => {
+  it('should return an array of environments', () => {
+    expect(getEnvironments()).toBeDefined();
+    expect(getEnvironments().length).toBeGreaterThan(0);
+  });
+});
 
 describe('getEnvironmentFromString', () => {
   it('should default to production when theres is no matching environment', () => {

@@ -43,7 +43,7 @@ describe('execute', () => {
 });
 
 describe('useCLI', () => {
-  it('should cause an app initilization to invoke it', () => {
+  it('should cause an app initilization to invoke it', async () => {
     let dummyCLI = jest.fn(() => true);
     let dummyCLICB = async () => dummyCLI();
     expect(() => new DummyApp()).not.toThrow();
@@ -53,7 +53,8 @@ describe('useCLI', () => {
     expect(() => useCLI(dummyCLICB)).not.toThrow();
 
     //Should be called on init
-    expect(() => new DummyApp()).not.toThrow();
+    let app = new DummyApp();
+    await expect(app.init()).resolves.not.toThrow();
     expect(dummyCLI).toHaveBeenCalled();
 
     //Allow unlinking

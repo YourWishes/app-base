@@ -21,31 +21,30 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-export enum Environment {
-  DEVELOPMENT = "DEVELOPMENT",
-  STAGING = "STAGING",
-  PRODUCTION = "PRODUCTION"
-}
+import { CLICommand, CommandResult, ICLICommander } from './../command/';
+import { CommandOptions } from './../options/';
+import { App } from './../../app/';
+import { getEnvironments, Environment } from './../../environment/';
 
-export const getEnvironments = () => {
-  return Object.keys(Environment).map(key => Environment[key]).filter(value => typeof value === 'string') as string[];
-};
-
-export const getEnvironmentFromString = (env:string) => {
-  //Default to Production Mode.
-  env = env || "PRODUCTION";
-
-  switch(env.toUpperCase()) {
-    case 'PRODUCTION':
-      return Environment.PRODUCTION;
-    case 'STAGING':
-      return Environment.STAGING;
-    case 'DEVELOPMENT':
-      return Environment.DEVELOPMENT;
-    case 'TEST':
-      return Environment.DEVELOPMENT;
+export class EnvironmentCommand extends CLICommand {
+  constructor(commander:ICLICommander) {
+    super(
+      commander, 'environment', getEnvironments().reduce((x,e) => [...x,e,e.slice(0,1)], [])
+    );
   }
 
-  //Default again to prod.
-  return Environment.PRODUCTION;
+  async onCommand(app:App, action:string, options:CommandOptions):Promise<CommandResult> {
+    let envs = getEnvironments();
+    let env = (options.args['environment'] || envs.find(e => {
+      if(options.flags[e]) return true;//-development
+      if(options.flags[e.slice(0, 1)]) return true;//-d
+      return false;
+    })) as Environment;
+
+    if(!env) return false;
+
+    process.env['NODE_ENV'] = env.toLowerCase();
+    app.environment = env;
+    app.logger.info(`Environment set to ${app.logger.theme.success(env)}.`);
+  }
 }
