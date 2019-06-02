@@ -97,6 +97,6 @@ export class CLIManager implements ICLICommander {
   }
 
   ready() {
-    if(cli && !cli()) process.exit(-1);
+    if(cli && !cli(this.app)) process.exit(-1);
   }
 }

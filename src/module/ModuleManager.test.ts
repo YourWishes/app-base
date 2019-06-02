@@ -1,4 +1,6 @@
-import { Module, ModuleManager, IApp, App, CLICommand, CommandOptions } from './../';
+import {
+  Module, ModuleManager, IApp, App, CLICommand, CommandOptions, Version,NPMPackage
+} from './../';
 class DummyCommand extends CLICommand {
   mock:any = jest.fn();
 
@@ -15,7 +17,16 @@ class SubModuleClass extends Module {
   testDestroy:jest.Mock;
   async init() { this.testInit(); }
   async destroy() { this.testDestroy(); }
+
+  package:NPMPackage;
+  loadPackage():NPMPackage { return this.package; }
+
+  current:Version;
+  next:Version;
+  async getCurrentVersion() { return this.current; }
+  async getNewVersion() { return this.next; }
 }
+
 
 describe('ModuleManager', () => {
   it('should require an app instance', () => {
@@ -151,7 +162,6 @@ describe('removeCommand', () => {
 });
 
 
-
 describe('init', () => {
   it('should not throw any errors', async () => {
     let test = new ModuleManager(dummyApp);
@@ -185,9 +195,49 @@ describe('init', () => {
   });
 });
 
+
 describe('destroy', () => {
   it('should not throw any errors', async () => {
     let test = new ModuleManager(dummyApp);
     await expect(test.destroy()).resolves.not.toThrow();
+  });
+});
+
+describe('updateCheck', () => {
+  it('should compare versions', async () => {
+    let manager = new ModuleManager(dummyApp);
+    let module = new SubModuleClass(dummyApp);
+    module.package = {
+      name: 'Test Module'
+    };
+
+    manager.addModule(module);
+
+    module.current = [2,0,0];
+    module.next = [1,0, 0];
+
+    await expect(module.getCurrentVersion()).resolves.toStrictEqual([2,0,0]);
+
+    await expect(manager.updateCheck(module)).resolves.toEqual(false);
+
+    module.current = [2,1,0];
+    module.next = [2,0,0];
+    await expect(manager.updateCheck(module)).resolves.toEqual(false);
+
+    module.current = [2,1,1];
+    module.next = [2,1,0];
+    await expect(manager.updateCheck(module)).resolves.toEqual(false);
+
+    module.current = [2,0,0];
+    module.next = [3,0,0];
+    await expect(manager.updateCheck(module)).resolves.toEqual(true);
+
+    module.current = [3,0,0];
+    module.next = [3,1,0];
+    await expect(manager.updateCheck(module)).resolves.toEqual(true);
+
+    module.current = [3,1,0];
+    module.next = [3,1,1];
+    await expect(manager.updateCheck(module)).resolves.toEqual(true);
   });
 });

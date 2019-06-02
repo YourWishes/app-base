@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Dominic Masters
+// Copyright (c) 2018 Dominic Masters
 //
 // MIT License
 //
@@ -21,27 +21,32 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import * as chalk from 'chalk';
-import { Chalk } from 'chalk';
+export class LogLevel {
+  static DEBUG:LogLevel;
+  static SUCCESS:LogLevel;
+  static INFO:LogLevel;
+  static WARN:LogLevel;
+  static ERROR:LogLevel;
+  static SEVERE:LogLevel;
 
-export interface AppLoggerTheme {
-  severe:Chalk;
-  error:Chalk;
-  warning:Chalk;
-  debug:Chalk;
-  highlight:Chalk;
-  success:Chalk;
-  time:Chalk;
-  default:Chalk|null;
+  static LEVELS:LogLevel[]=[];
+
+  level:number;
+  name:string;
+  prefix:string;
+
+  constructor(level:number, name:string, prefix:string) {
+    this.level = level;
+    this.name = name;
+    this.prefix = prefix;
+
+    LogLevel.LEVELS.push(this);
+  }
 }
 
-export const DefaultTheme:AppLoggerTheme = {
-  severe:chalk.default.bgRed.white,
-  error:chalk.default.red,
-  warning:chalk.default.yellow,
-  debug:chalk.default.hex('#666666'),
-  highlight:chalk.default.magenta,
-  success:chalk.default.green,
-  time:chalk.default.hex('#666666'),
-  default:null
-}
+export const DEBUG = LogLevel.DEBUG = new LogLevel(30, 'Debug', 'DEBUG');
+export const INFO = LogLevel.INFO = new LogLevel(20, 'Info', 'INFO');
+export const SUCCESS = LogLevel.SUCCESS = new LogLevel(15, 'Success', 'SUCCESS');
+export const WARN = LogLevel.WARN = new LogLevel(10, 'Warning', 'WARN');
+export const ERROR = LogLevel.ERROR = new LogLevel(5, 'Error', 'ERROR');
+export const SEVERE = LogLevel.SEVERE = new LogLevel(0, 'Severe', 'SEVERE');

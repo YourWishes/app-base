@@ -26,6 +26,7 @@ export * from './cache/';
 export * from './cli';
 export * from './config/';
 export * from './environment/';
-export * from './logger/';
+export * from './log/';
 export * from './module/';
+export * from './update/';
 export * from './utils/';

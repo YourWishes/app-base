@@ -21,30 +21,9 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-export class LogLevel {
-  static DEBUG:LogLevel;
-  static INFO:LogLevel;
-  static WARN:LogLevel;
-  static ERROR:LogLevel;
-  static SEVERE:LogLevel;
+import { Logger, Loggable } from './../logger/';
+import { LogLevel } from './../level/';
 
-  static LEVELS:LogLevel[]=[];
-
-  level:number;
-  name:string;
-  prefix:string;
-
-  constructor(level:number, name:string, prefix:string) {
-    this.level = level;
-    this.name = name;
-    this.prefix = prefix;
-
-    LogLevel.LEVELS.push(this);
-  }
+export interface LogListener {
+  onLog(level:LogLevel, info:Loggable, logger:Logger, time:Date):void;
 }
-
-export const DEBUG = LogLevel.DEBUG = new LogLevel(30, 'Debug', 'DEBUG');
-export const INFO = LogLevel.INFO = new LogLevel(20, 'Info', 'INFO');
-export const WARN = LogLevel.WARN = new LogLevel(10, 'Warning', 'WARN');
-export const ERROR = LogLevel.ERROR = new LogLevel(5, 'Error', 'ERROR');
-export const SEVERE = LogLevel.SEVERE = new LogLevel(0, 'Severe', 'SEVERE');

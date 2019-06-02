@@ -56,11 +56,15 @@ export class ModuleManager {
     });
   }
 
-  async updateCheck(module:Module):Promise<void> {
+  async updateCheck(module:Module):Promise<boolean> {
     let current = await module.getCurrentVersion();
     let next = await module.getNewVersion();
-    if(current.every((c,i) => c >= next[i])) return;
+    if(current.every((c,i) => {
+      if(next.length-1 < i) return true;
+      return c >= next[i]
+    })) return false;
     module.logger.info(`${module.getName()} has an update ${current.join('.')} => ${next.join('.')}`);
+    return true;
   }
 
   async destroy():Promise<void> {

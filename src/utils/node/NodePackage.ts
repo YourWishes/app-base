@@ -53,7 +53,6 @@ export type NPMPackage = {
 //Version Related
 export const getPackageVersion = (ver:string):Version => {
   if(!ver || !ver.length) throw new Error('Version is not a valid string.');
-
   let bits = ver.split('.');
   if(bits.length != 3) throw new Error('Invalid Version String');
   return bits.map(bit => {
@@ -69,13 +68,13 @@ export const getGitVersion = async (pkg:NPMPackage):Promise<Version> => {
 
   repository = repository || "";
   if(typeof repository['url'] !== typeof undefined) repository = repository['url'];
+  if(!repository || !(repository as string).length) throw new Error("Missing repository in package data");
 
   let parts = (repository as string).split('git+');
   let [ a, b ] = parts;
   a = a && a.length ? a : b;
   a = a.split('.git')[0];
 
-  if(!repository || !(repository as string).length) throw new Error("Missing repository in package data");
 
 
   //Now attempt a git fetch....

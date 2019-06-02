@@ -22,7 +22,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import { IApp } from './../app/';
-import { Logger } from './../logger/';
+import { Logger } from '../log';
 import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
 import { IUpdateable, Version } from './../update/';
 import { ICLICommander, CLICommand } from './../cli/';
@@ -72,6 +72,6 @@ export abstract class Module implements IUpdateable, ICLICommander {
 
   async getNewVersion():Promise<Version> {
     if(!this.package) throw new Error("Missing package data");
-    return getGitVersion(this.package);
+    return await getGitVersion(this.package);
   }
 }

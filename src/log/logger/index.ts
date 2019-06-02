@@ -21,9 +21,14 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { LogLevel } from './LogLevel';
-import * as LogLevels from './LogLevel';
-import { LogListener } from './LogListener';
+import { LogLevel } from './../level/';
+import * as LogLevels from './../level';
+import { LogListener } from './../listener/';
+import { LoggerTheme, DefaultTheme } from './../theme/';
+
+export type Loggable = (
+  string|Error|any[]|any
+);
 
 export class Logger {
   parent:Logger;
@@ -31,6 +36,10 @@ export class Logger {
 
   constructor(parent:Logger=null) {
     this.parent = parent;
+  }
+
+  getTheme():LoggerTheme {
+    return this.parent ? this.parent.getTheme() : DefaultTheme;
   }
 
   addListener(listener:LogListener) {
@@ -49,7 +58,7 @@ export class Logger {
   /*** Logging methods ***/
 
   //Root logging method.
-  log(level:LogLevel, info:string|Error, source:Logger=null, time:Date=null) {
+  log(level:LogLevel, info:Loggable, source:Logger=null, time:Date=null) {
     source = source || this;
     time = time || new Date();
 
@@ -63,23 +72,23 @@ export class Logger {
   }
 
   //Methods for different levels
-  debug(info:string|Error, source:Logger=null, time:Date=null) {
+  debug(info:Loggable, source:Logger=null, time:Date=null) {
     this.log(LogLevels.DEBUG, info, source, time);
   }
 
-  info(info:string|Error, source:Logger=null, time:Date=null) {
+  info(info:Loggable, source:Logger=null, time:Date=null) {
     this.log(LogLevels.INFO, info, source, time);
   }
 
-  warn(info:string|Error, source:Logger=null, time:Date=null) {
+  warn(info:Loggable, source:Logger=null, time:Date=null) {
     this.log(LogLevels.WARN, info, source, time);
   }
 
-  error(info:string|Error, source:Logger=null, time:Date=null) {
+  error(info:Loggable, source:Logger=null, time:Date=null) {
     this.log(LogLevels.ERROR, info, source, time);
   }
 
-  severe(info:string|Error, source:Logger=null, time:Date=null) {
+  severe(info:Loggable, source:Logger=null, time:Date=null) {
     this.log(LogLevels.SEVERE, info, source, time);
   }
 }

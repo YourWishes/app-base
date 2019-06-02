@@ -1,6 +1,6 @@
 import {
   Logger, LogLevel, LogListener, DEBUG, INFO, WARN, ERROR, SEVERE
-} from './index';
+} from './../';
 
 class TestListener implements LogListener {
   test:jest.Mock;

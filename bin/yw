@@ -1,3 +1,5 @@
 #! /usr/bin/env node
 
 const yw = require('./../dist/cli/cli/');
+
+yw.cli();//Initialize the CLI
