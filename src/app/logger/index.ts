@@ -22,9 +22,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import { IApp } from './../IApp';
-import { Environment } from './../../environment/';
-import { LogLevel, Logger, LogListener, DefaultTheme, LoggerTheme, getColorFromLevel, Loggable } from '../../log';
-import { padWith } from './../../utils/';
+import { Environment } from '~environment';
+import { LogLevel, Logger, LogListener, DefaultTheme, LoggerTheme, getColorFromLevel, Loggable } from '~log';
+import { padWith } from '~utils';
 
 export class AppLogger extends Logger implements LogListener {
   app:IApp;

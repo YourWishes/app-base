@@ -23,8 +23,8 @@
 
 import { CLICommand, CommandResult, ICLICommander } from './../command/';
 import { CommandOptions } from './../options/';
-import { IApp } from './../../app/';
-import { getEnvironments, Environment } from './../../environment/';
+import { IApp } from '~app';
+import { getEnvironments, Environment } from '~environment';
 
 export class EnvironmentCommand extends CLICommand {
   constructor(commander:ICLICommander) {

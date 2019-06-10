@@ -22,13 +22,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import { IApp } from './IApp';
-import { Environment, getEnvironmentFromString } from './../environment/';
-import { ModuleManager } from './../module/';
-import { Configuration } from './../config/Configuration';
+import { Environment, getEnvironmentFromString } from '~environment';
 import { AppLogger } from './logger/';
-import { CLIManager, CLICommand, EnvironmentCommand } from './../cli/';
-import { Version } from './../update/';
-import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
+import { ModuleManager } from '~module';
+import { Configuration } from '~config/Configuration';
+import { CLIManager, EnvironmentCommand } from '~cli';
+import { Version } from '~update';
+import { NPMPackage, getPackageVersion, getGitVersion } from '~utils';
 
 //App Class
 export abstract class App implements IApp {

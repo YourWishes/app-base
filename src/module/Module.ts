@@ -21,11 +21,11 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { IApp } from './../app/';
+import { IApp } from '~app/';
 import { Logger } from '../log';
-import { NPMPackage, getPackageVersion, getGitVersion } from './../utils';
-import { IUpdateable, Version } from './../update/';
-import { ICLICommander, CLICommand } from './../cli/';
+import { NPMPackage, getPackageVersion, getGitVersion } from '~utils';
+import { IUpdateable, Version } from '~update/';
+import { ICLICommander, CLICommand } from '~cli/';
 
 export abstract class Module implements IUpdateable, ICLICommander {
   app:IApp;

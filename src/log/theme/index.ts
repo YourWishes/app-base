@@ -70,7 +70,7 @@ export const getColorFromLevel = (theme:LoggerTheme, level:LogLevel) => {
 
     case LogLevel.WARN:
       return theme.warning || defColor;
-      
+
     default:
       return defColor;
   }

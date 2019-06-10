@@ -21,13 +21,10 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { Environment } from './../environment/';
-import { AppLogger } from './logger/';
-import { Configuration } from './../config/Configuration';
-import { ModuleManager } from './../module/';
-import { CLIManager } from './../cli/';
-import { IUpdateable } from './../update/';
-import { NPMPackage } from './../utils';
+import {
+  Environment, AppLogger, Configuration, ModuleManager, CLIManager, IUpdateable,
+  NPMPackage
+} from './../';
 
 export interface IApp extends IUpdateable {
   environment:Environment;

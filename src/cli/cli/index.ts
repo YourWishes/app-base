@@ -43,7 +43,7 @@
 */
 
 import * as path from 'path';
-import { IApp } from './../../app/';
+import { IApp } from '~app';
 import { useCLI } from './../manager/';
 
 export const cli = () => {

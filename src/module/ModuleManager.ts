@@ -22,7 +22,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import { Module } from './Module';
-import { IApp } from './../app/';
+import { IApp } from '~app';
 
 export class ModuleManager {
   app:IApp;
