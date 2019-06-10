@@ -64,15 +64,15 @@ describe('loadConfig', () => {
 
     //Override the config path
     config.getConfigFilePath = () => `${fakePath}doesnotexist`;
-    await expect(config.loadConfig()).rejects;
+    await expect(config.loadConfig()).rejects.toThrow();
   });
 
-  it('should read heroku variables', () => {
+  it('should read heroku variables', async () => {
     let config = new Configuration();
     process.env.test = 'Test Value';
     process.env.NODE_HOME = "heroku";
 
-    expect(config.loadConfig()).resolves;
+    await expect(config.loadConfig()).resolves.not.toThrow();
     expect(config.data).toHaveProperty('test');
     expect(config.data['test']).toEqual('Test Value');
   });
