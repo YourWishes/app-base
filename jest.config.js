@@ -1,12 +1,14 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const { compilerOptions } = require('./tsconfig');
-
 module.exports = {
   "roots": [
     "<rootDir>/src"
   ],
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
+  },
+  "globals": {
+    'ts-jest': {
+      compiler: 'ttypescript'
+    }
   },
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
   "moduleFileExtensions": [
@@ -15,8 +17,5 @@ module.exports = {
     "js",
     "jsx",
     "json"
-  ],
-  moduleNameMapper: {
-    '^\~(.*)$': '<rootDir>/src/$1'
-  }
+  ]
 }
