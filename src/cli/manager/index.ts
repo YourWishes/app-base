@@ -23,16 +23,19 @@
 
 import { IApp } from '~app';
 import { CommandOptions, getOptionsForArgs } from './../options/';
-import { ICLICommander, CLICommand } from './../command/';
+import { ICLICommander, CLICommand, CommandResult } from './../command/';
+import * as readline from 'readline';
 
 //CLI Interface
+export type CLIProgram = (app:IApp) => Promise<CommandResult>;
+
 let cli = null;
-export type CLIProgram = (app:IApp) => Promise<boolean>;
 export const useCLI = (program:CLIProgram) => cli = program;
 
 export class CLIManager implements ICLICommander {
   app:IApp;
   cliCommands:CLICommand[]=[];
+  readLine:readline.ReadLine;
 
   constructor(app:IApp) {
     if(!app) throw new Error('Please supply a valid App');
@@ -52,17 +55,32 @@ export class CLIManager implements ICLICommander {
     this.cliCommands.splice(i,1);
   }
 
-  async run():Promise<boolean> {
+  async run() {
+    //Let's start by handling the terminal input
+    let commandResult = await this.handleTerminal();
+    return commandResult;
+  }
+
+  handleTerminal() {
     //Dupe so we can safely modify
     let cliArgs = [ ...process.argv ];
 
     let handle = cliArgs.shift();//This is the node path
     let command = cliArgs.shift();//This is the command that was executed (e.g. node or ping)
 
+    //For this part we're just going to pass all of this over to the raw handler.
+    return this.handleInput(cliArgs.join(' '));
+  }
+
+  async handleInput(rawInput:string):Promise<CommandResult> {
+    let bits = rawInput.split(' ');//Split by spaces.
+
     //Since the structure requires an "action, there must be at least 1 element
-    if(!cliArgs.length) return;//No element, no action
-    let action = cliArgs.shift();
-    let options = getOptionsForArgs(cliArgs);//Determine flags and args
+    if(!bits.length) return false;//No element, no action
+
+    //Handle raw input (a str]ing that a user has manually typed)
+    let action = bits.shift();
+    let options = getOptionsForArgs(bits);//Determine flags and args
 
     //First we're going to hint to this itself the current command details.
     //The purpose of this is to allow the app to set certain variables based on
