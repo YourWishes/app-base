@@ -50,6 +50,18 @@ export class Configuration {
       path.resolve(__dirname, 'Configuration.test.json')
     ];
 
+    //Advanced: add script that's launched directories.
+    if(process && process.mainModule && process.mainModule.filename) {
+      let mainDir = path.dirname(process.mainModule.filename);
+      paths = [
+        ...paths,
+        path.resolve(mainDir, 'data', 'config.json'),
+        path.resolve(mainDir, 'src', 'data', 'config.json'),
+        path.resolve(mainDir, 'private', 'data', 'config.json'),
+        path.resolve(mainDir, 'src', 'private', 'data', 'config.json')
+      ];
+    }
+
     //Attempt to find configuration
     let p = paths.find(path => {
       return fs.existsSync(path);

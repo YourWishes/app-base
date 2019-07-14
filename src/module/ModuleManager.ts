@@ -57,6 +57,10 @@ export class ModuleManager {
   }
 
   async updateCheck(module:Module):Promise<boolean> {
+    if(!module.loadPackage()) {
+      module.logger.debug(`Unable to load NPM Package, version checking cannot occur.`);
+      return;
+    }
     let current = await module.getCurrentVersion();
     let next = await module.getNewVersion();
     if(current.every((c,i) => {

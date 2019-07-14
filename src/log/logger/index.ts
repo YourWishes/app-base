@@ -91,4 +91,8 @@ export class Logger {
   severe(info:Loggable, source:Logger=null, time:Date=null) {
     this.log(LogLevels.SEVERE, info, source, time);
   }
+
+  success(info:Loggable, source:Logger=null, time:Date=null) {
+    this.log(LogLevels.SUCCESS, info, source, time);
+  }
 }

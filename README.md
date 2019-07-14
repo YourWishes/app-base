@@ -108,7 +108,8 @@ Non-Module modules offer interfaces that are implemented by other modules.
 	 - Offers connection via Private or Public API Keys
 	 - Per-Store Management
 	 - Pre-Defines common routes in server module
-	 - Offers (BETA) Token and Task delegation to ensure app is performing, while not reaching API call limit
+	 - Offers Token and Task delegation to ensure app is performing, while not reaching API call limit
+   - Easy setup of url event handlers (e.g. Webhooks and Carrier Callbacks)
  - App Simple React
 	 - Funnily enough one of the most complicated modules
 	 - Wraps around App React to provide even more common functionality and a front-end interface for apps, similar to how app-base functions for a backend interface
@@ -150,5 +151,5 @@ The following pillars are in no particular order, each is something I would like
 	 - As name suggests, I have this implemented on my personal site, a webpack compiler at runtime
  - Migrate existing projects to App Framework
 	 - domsPlace is the notable example
- - Load bearing
-	 - Not sure how, but sure why not
+ - Load bearing / Serverless
+	 - Not sure how, but sure why not, this is quickly moving up in priority.

@@ -86,9 +86,7 @@ export abstract class App implements IApp {
     await this.config.loadConfig();
     await this.modules.init();
 
-    this.logger.info(this.logger.theme.success(
-      'The app has started successfully.'
-    ));
+    this.logger.success('The app has started successfully.');
   }
 
   async stop():Promise<void> {

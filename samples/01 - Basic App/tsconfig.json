@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "sourceMap": true,
+    "declaration": true,
+    "typeRoots": [ "./../../node_modules/@types/" ],
+    "baseUrl": "src"
+  },
+  "include": [
+    "index.ts"
+  ],
+  "exclude": [
+    "../../node_modules",
+    "dist"
+  ]
+}
